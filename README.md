@@ -6,5 +6,5 @@
 - **npm run test** -- running tests from tests/ folder
 
 ## Profit
-You can use one repository for writing and testing your contract.
+You can use one repository for writing (on FunC) and testing (Typescript) your contracts.
 
