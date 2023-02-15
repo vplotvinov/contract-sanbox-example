@@ -7,7 +7,7 @@ import {
     beginCell,
     contractAddress,
     toNano,
-    Sender, storeStateInit
+    Sender, storeStateInit, Builder
 } from "ton-core";
 import {
     Maybe
@@ -50,16 +50,13 @@ export class IdoContract implements Contract {
         return contractAddress(0, {code: IdoContract.code, data: params.initData})
     }
 
-    async updateOwner(provider: ContractProvider, via: Sender, params: {
-        newOwner: Address
+    async send(provider: ContractProvider, via: Sender, params: {
         value?: bigint
+        body: Cell
     }) {
-        await provider.internal(via, {
+        return await provider.internal(via, {
             value: params.value ?? toNano('0.1'),
-            body: beginCell()
-                .storeUint(202, 32) // op
-                .storeAddress(params.newOwner)
-                .endCell()
+            body: params.body
         })
     }
 

@@ -7,10 +7,6 @@
 #include "imports/constants.fc";
 #include "store/ido.fc";
 
-const STATE_IDO_OPEN = 1;
-const STATE_IDO_CLOSED = 2;
-const STATE_IDO_CLAIM = 3;
-
 () recv_internal(int msg_value, cell in_msg_full, slice in_msg_body) impure {
     slice cs = in_msg_full.begin_parse();
     int flags = cs~load_uint(4);
@@ -27,6 +23,7 @@ const STATE_IDO_CLAIM = 3;
         if (op == op::change_owner) {
             ctx_owner_addr = cs~load_msg_addr();
             store_ido_data();
+            return ();
         }
         return (); ;; it's owner
     }

@@ -44,14 +44,13 @@ PROGRAM{
       SWAP
       202 PUSHINT	//  cs op _21=202
       EQUAL	//  cs _22
-      IF:<{	//  cs
+      IFJMP:<{	//  cs
         LDMSGADDR	//  _35 _34
         DROP	//  _23
         ctx_owner_addr SETGLOB
         store_ido_data CALLDICT
-      }>ELSE<{
-        DROP	// 
-      }>
+      }>	//  cs
+      DROP	// 
     }>	//  cs
     DROP	// 
     101 THROW
