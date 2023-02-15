@@ -1,0 +1,36 @@
+;; =============== storage =============================
+
+;; storage binary format is defined as TL-B in companion .tlb file
+#pragma version >=0.2.0;
+
+#include "imports/stdlib.fc";
+#include "imports/constants.fc";
+#include "store/ido.fc";
+
+const STATE_IDO_OPEN = 1;
+const STATE_IDO_CLOSED = 2;
+const STATE_IDO_CLAIM = 3;
+
+() recv_internal(int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    slice cs = in_msg_full.begin_parse();
+    int flags = cs~load_uint(4);
+
+    if (flags & 1) { ;; ignore all bounced messages
+        return ();
+    }
+
+    slice from_addr = cs~load_msg_addr();
+    load_ido_data();
+
+    if (equal_slices(ctx_owner_addr, from_addr)) {
+        return (); ;; it's owner
+    }
+
+    throw(error::unknown_op);
+}
+
+;; get ido state
+(slice) get_owner() method_id {
+    load_ido_data();
+    return (ctx_owner_addr);
+}

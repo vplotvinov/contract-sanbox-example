@@ -1,0 +1,52 @@
+"Asm.fif" include
+// automatically generated from `contracts/ido.fc` incl:`contracts/imports/stdlib.fc` incl:`contracts/imports/constants.fc` incl:`contracts/store/ido.fc` 
+PROGRAM{
+  DECLPROC load_ido_data
+  DECLPROC store_ido_data
+  DECLPROC recv_internal
+  80293 DECLMETHOD get_owner
+  DECLGLOBVAR ctx_owner_addr
+  load_ido_data PROC:<{
+    // 
+    c4 PUSH	//  _1
+    CTOS	//  ds
+    LDMSGADDR	//  _6 _5
+    DROP	//  _3
+    ctx_owner_addr SETGLOB
+  }>
+  store_ido_data PROC:<{
+    // 
+    NEWC	//  _0
+    ctx_owner_addr GETGLOB	//  _0 _1
+    STSLICER	//  _2
+    ENDC	//  _3
+    c4 POP
+  }>
+  recv_internal PROC:<{
+    //  msg_value in_msg_full in_msg_body
+    DROP
+    NIP	//  in_msg_full
+    CTOS	//  cs
+    4 LDU	//  flags cs
+    SWAP
+    1 PUSHINT	//  cs flags _9=1
+    AND	//  cs _10
+    IFJMP:<{	//  cs
+      DROP	// 
+    }>	//  cs
+    LDMSGADDR	//  _22 _21
+    DROP	//  from_addr
+    load_ido_data CALLDICT
+    ctx_owner_addr GETGLOB	//  from_addr _15
+    SWAP	//  _15 from_addr
+    SDEQ	//  _16
+    IFJMP:<{	// 
+    }>	// 
+    101 THROW
+  }>
+  get_owner PROC:<{
+    // 
+    load_ido_data CALLDICT
+    ctx_owner_addr GETGLOB	//  _1
+  }>
+}END>c

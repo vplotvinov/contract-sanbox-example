@@ -1,0 +1,13 @@
+global slice ctx_owner_addr;
+
+() load_ido_data() impure {
+    slice ds = get_data().begin_parse();
+    ctx_owner_addr = ds~load_msg_addr();
+}
+
+() store_ido_data() impure {
+    set_data(begin_cell()
+            .store_slice(ctx_owner_addr)
+            .end_cell()
+    );
+}
