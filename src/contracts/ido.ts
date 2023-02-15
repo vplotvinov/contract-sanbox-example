@@ -52,7 +52,7 @@ export class IdoContract implements Contract {
 
     async send(provider: ContractProvider, via: Sender, params: {
         value?: bigint
-        body: Cell
+        body?: Cell | string
     }) {
         return await provider.internal(via, {
             value: params.value ?? toNano('0.1'),

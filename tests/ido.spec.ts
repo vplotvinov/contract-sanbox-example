@@ -24,9 +24,11 @@ describe('Ido contract', () => {
         let ownerOfContract = await ido.getOwner()
         expect(ownerOfContract.toString()).eq(owner.address.toString())
 
-        await ido.send(owner.getSender(), {
-            body: updateOwnerBody(newOwner.address),
+        const result = await ido.send(owner.getSender(), {
+            body: updateOwnerBody(newOwner.address)
         })
+        result.transactions.pop()
+        console.log(result.transactions.pop())
 
         ownerOfContract = await ido.getOwner()
         expect(ownerOfContract.toString()).eq(newOwner.address.toString())

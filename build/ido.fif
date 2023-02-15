@@ -24,36 +24,41 @@ PROGRAM{
   }>
   recv_internal PROC:<{
     //  msg_value in_msg_full in_msg_body
-    DROP
-    NIP	//  in_msg_full
-    CTOS	//  cs
-    4 LDU	//  flags cs
+    s2 POP	//  in_msg_body in_msg_full
+    CTOS	//  in_msg_body cs
+    4 LDU	//  in_msg_body flags cs
     SWAP
-    1 PUSHINT	//  cs flags _9=1
-    AND	//  cs _10
-    IFJMP:<{	//  cs
-      DROP	// 
-    }>	//  cs
-    LDMSGADDR	//  from_addr cs
+    1 PUSHINT	//  in_msg_body cs flags _9=1
+    AND	//  in_msg_body cs _10
+    IFJMP:<{	//  in_msg_body cs
+      2DROP	// 
+    }>	//  in_msg_body cs
+    OVER	//  in_msg_body cs in_msg_body
+    SEMPTY	//  in_msg_body cs _11
+    IFJMP:<{	//  in_msg_body cs
+      2DROP	// 
+    }>	//  in_msg_body cs
+    LDMSGADDR	//  in_msg_body _32 _31
+    DROP	//  in_msg_body from_addr
     load_ido_data CALLDICT
-    ctx_owner_addr GETGLOB	//  from_addr cs _15
-    ROT	//  cs _15 from_addr
-    SDEQ	//  cs _16
-    IFJMP:<{	//  cs
-      32 LDU	//  op cs
+    ctx_owner_addr GETGLOB	//  in_msg_body from_addr _16
+    SWAP	//  in_msg_body _16 from_addr
+    SDEQ	//  in_msg_body _17
+    IFJMP:<{	//  in_msg_body
+      32 LDU	//  op in_msg_body
       SWAP
-      202 PUSHINT	//  cs op _21=202
-      EQUAL	//  cs _22
-      IFJMP:<{	//  cs
-        LDMSGADDR	//  _35 _34
-        DROP	//  _23
+      202 PUSHINT	//  in_msg_body op _22=202
+      EQUAL	//  in_msg_body _23
+      IFJMP:<{	//  in_msg_body
+        LDMSGADDR	//  _36 _35
+        DROP	//  _24
         ctx_owner_addr SETGLOB
         store_ido_data CALLDICT
-      }>	//  cs
+      }>	//  in_msg_body
       DROP	// 
-    }>	//  cs
+    }>	//  in_msg_body
     DROP	// 
-    101 THROW
+    999 THROW
   }>
   get_owner PROC:<{
     // 

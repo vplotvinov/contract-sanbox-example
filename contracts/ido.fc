@@ -15,13 +15,16 @@
         return ();
     }
 
+    if (in_msg_body.slice_empty?()) {
+        return ();
+    }
+
     slice from_addr = cs~load_msg_addr();
     load_ido_data();
-
     if (equal_slices(ctx_owner_addr, from_addr)) {
-        int op = cs~load_uint(32);
+        int op = in_msg_body~load_uint(32);
         if (op == op::change_owner) {
-            ctx_owner_addr = cs~load_msg_addr();
+            ctx_owner_addr = in_msg_body~load_msg_addr();
             store_ido_data();
             return ();
         }
