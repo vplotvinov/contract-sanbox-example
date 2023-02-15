@@ -1,4 +1,6 @@
-const int error::unknown_op = 101;
-
 const int demo::start = 10;
 const int demo::finish = 11;
+
+const int error::unknown_op = 101;
+
+const int op::change_owner = 202;

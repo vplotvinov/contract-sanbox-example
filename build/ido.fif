@@ -34,14 +34,26 @@ PROGRAM{
     IFJMP:<{	//  cs
       DROP	// 
     }>	//  cs
-    LDMSGADDR	//  _22 _21
-    DROP	//  from_addr
+    LDMSGADDR	//  from_addr cs
     load_ido_data CALLDICT
-    ctx_owner_addr GETGLOB	//  from_addr _15
-    SWAP	//  _15 from_addr
-    SDEQ	//  _16
-    IFJMP:<{	// 
-    }>	// 
+    ctx_owner_addr GETGLOB	//  from_addr cs _15
+    ROT	//  cs _15 from_addr
+    SDEQ	//  cs _16
+    IFJMP:<{	//  cs
+      32 LDU	//  op cs
+      SWAP
+      202 PUSHINT	//  cs op _21=202
+      EQUAL	//  cs _22
+      IF:<{	//  cs
+        LDMSGADDR	//  _35 _34
+        DROP	//  _23
+        ctx_owner_addr SETGLOB
+        store_ido_data CALLDICT
+      }>ELSE<{
+        DROP	// 
+      }>
+    }>	//  cs
+    DROP	// 
     101 THROW
   }>
   get_owner PROC:<{

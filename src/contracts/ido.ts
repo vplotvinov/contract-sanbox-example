@@ -50,6 +50,19 @@ export class IdoContract implements Contract {
         return contractAddress(0, {code: IdoContract.code, data: params.initData})
     }
 
+    async updateOwner(provider: ContractProvider, via: Sender, params: {
+        newOwner: Address
+        value?: bigint
+    }) {
+        await provider.internal(via, {
+            value: params.value ?? toNano('0.1'),
+            body: beginCell()
+                .storeUint(202, 32) // op
+                .storeAddress(params.newOwner)
+                .endCell()
+        })
+    }
+
     async getOwner(provider: ContractProvider): Promise<Address> {
         const { stack } = await provider.get('get_owner', [])
         return stack.readAddress()

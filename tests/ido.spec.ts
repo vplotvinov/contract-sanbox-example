@@ -5,14 +5,25 @@ import { IdoContract } from "../src/contracts/ido";
 import { toNano } from "ton-core"; // register matchers
 
 describe('Ido contract', () => {
-    it("call get method", async () => {
+    it("set new owner", async () => {
         const blkch = await Blockchain.create()
         const owner = await blkch.treasury('owner')
+        const newOwner = await blkch.treasury('newOwner')
+
         const ido = blkch.openContract(new IdoContract(owner.address))
         await ido.sendDeploy(owner.getSender(), {
             initData: ido.init!.data
         })
-        const addrOfContract = await ido.getOwner()
-        expect(addrOfContract.toString()).eq(owner.address.toString())
+
+        let ownerOfContract = await ido.getOwner()
+        expect(ownerOfContract.toString()).eq(owner.address.toString())
+
+        await ido.updateOwner(owner.getSender(), {
+            newOwner: newOwner.address
+        })
+
+        ownerOfContract = await ido.getOwner()
+        expect(ownerOfContract.toString()).eq(newOwner.address.toString())
+
     })
 })

@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "description": "Jetton Kit for common tasks",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "ts-node src/index.ts",
     "test": "jest",
-    "build": "ts-node ./build/_build.ts"
+    "build": "ts-node build/_build.ts"
   },
   "author": "Tonstarter",
   "license": "MIT",

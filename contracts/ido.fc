@@ -23,6 +23,11 @@ const STATE_IDO_CLAIM = 3;
     load_ido_data();
 
     if (equal_slices(ctx_owner_addr, from_addr)) {
+        int op = cs~load_uint(32);
+        if (op == op::change_owner) {
+            ctx_owner_addr = cs~load_msg_addr();
+            store_ido_data();
+        }
         return (); ;; it's owner
     }
 
